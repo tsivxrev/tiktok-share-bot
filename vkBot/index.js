@@ -196,7 +196,13 @@ async (context) => {
 
   if (answer.payload.choice === 'logsFromOneWeek') {
     logger.info(`Request to receive logs at: ${context.senderId}`, {label: 'VK'})
-     context.send("Лог-лист за последнюю неделю: \n\n " + await streamLogs(7))
+    context.sendDocuments({ 
+      value: 'logs/application-info.log',
+      filename: 'logs.txt'
+    }, 
+    {
+      message: "Лог-лист за последнюю неделю"
+    })
   }
 
   if (answer.payload.choice === 'logsFromCustomPeriod') {

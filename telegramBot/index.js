@@ -19,10 +19,11 @@ bot.use(stage.middleware())
 
 bot.start(async(ctx) => {
     await ctx.replyWithMarkdown(ctx.i18n.t('commands.start'))
-    addUserTelegram(ctx.from.id).catch(() => {});
+    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(() => {});
 })
 bot.help(async(ctx) => {
     await ctx.replyWithMarkdown(ctx.i18n.t('commands.start'))
+    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(() => {});
 })
 bot.command('git', async (ctx) => {
     await ctx.replyWithMarkdown("*Git:* `"+ utils.getGitCommitHash(false) +"`")

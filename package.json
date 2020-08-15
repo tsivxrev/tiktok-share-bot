@@ -1,0 +1,30 @@
+{
+  "name": "tiktok-share",
+  "version": "2.0",
+  "description": "App for sharing tiktok videos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xvtn/tiktok-share.git"
+  },
+  "author": "xvtn, keyzt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xvtn/tiktok-share/issues"
+  },
+  "homepage": "https://github.com/xvtn/tiktok-share#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.20",
+    "telegraf": "^3.38.0",
+    "telegraf-i18n": "^6.6.0",
+    "tiktok-scraper": "^1.3.0",
+    "vk-io": "^4.0.0-rc.30",
+    "vk-io-question": "^2.0.1",
+    "winston": "^3.3.3"
+  }
+}

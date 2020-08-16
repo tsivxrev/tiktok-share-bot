@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media\logo.svg" width="192" />
+  <img src="media\logo.svg" width="150" />
   <h3 align="center">TikTok Share</h3>
   <p align="center">A Telegram bot to download and sharing TikTok videos</p>
   <p align="center">
@@ -8,4 +8,6 @@
     </a>
   </p>
 </p>
+
+# FAQ
 

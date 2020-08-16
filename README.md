@@ -11,6 +11,6 @@
 
 ## Usage
 
-Send me the URL to the TikTok video
+Send me URL to the TikTok video for continue.
 
 

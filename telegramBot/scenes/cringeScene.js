@@ -77,7 +77,6 @@ const superWizard = new WizardScene('super-wizard',
       [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_video_no_watermark'), 'videoNoWatermark')],
       [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_video_watermark'), 'videoWatermark')]
     ]).extra())
-    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(() => {});
     return ctx.wizard.next()
   },
   stepHandler

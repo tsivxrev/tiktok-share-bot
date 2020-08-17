@@ -1,12 +1,13 @@
-const {Telegraf} = require('telegraf')
+const { Telegraf } = require('telegraf')
+
 const session = require('telegraf/session')
 const Stage = require('telegraf/stage')
 const { logger } = require('../module/logger')
 const { addUserTelegram } = require('../db/userTelegram')
-const utils = require("../module/utils")
 const { superWizard } = require('./scenes/cringeScene')
 const { logsSceneWizard } = require('./scenes/logsScene')
 const i18n  = require("./i18n/index")
+const utils = require("../module/utils")
 require('dotenv').config()
 
 
@@ -18,12 +19,17 @@ bot.use(i18n.middleware())
 bot.use(stage.middleware())
 
 bot.start(async(ctx) => {
+    logger.info("Executed command 'start' at " + ctx.from.id, {label: 'Telegram'})
     await ctx.replyWithMarkdown(ctx.i18n.t('commands.start'))
-    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(() => {});
+    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(err => { 
+        logger.error(err, {label: 'Telegram'})
+    });
 })
 bot.help(async(ctx) => {
     await ctx.replyWithMarkdown(ctx.i18n.t('commands.start'))
-    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(() => {});
+    addUserTelegram(ctx.from.id, ctx.from.language_code).catch(err => { 
+        logger.error(err, {label: 'Telegram'})
+    });
 })
 bot.command('git', async (ctx) => {
     await ctx.replyWithMarkdown("*Git:* `"+ utils.getGitCommitHash(false) +"`")
@@ -40,6 +46,7 @@ bot.hears(/(https?:\/\/[^ ]*)/,  Stage.enter('super-wizard'))
 bot.catch((err, ctx) => {
     logger.error(`Ooops, encountered an error for ${ctx.updateType} ${err}`,  {label: 'Telegram'})
 })
+
 
 const profiler = logger.startTimer();
 bot.launch().then(() => {

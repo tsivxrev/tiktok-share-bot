@@ -1,9 +1,16 @@
-const { execSync } = require("child_process")
-
+const { execSync } = require("child_process");
+const { logger } = require("../module/logger")
 
 let getGitCommitHash = (long=true) => {
     let gitCommand = `${long ? `git rev-parse HEAD` : `git rev-parse --short HEAD`}`;
-    return execSync(gitCommand).toString().trim();
+    let commit_hash = "";
+    try {
+        commit_hash = execSync(gitCommand).toString().trim();
+    } catch (e) {
+        logger.error(e)
+        commit_hash = ""
+    }
+    return commit_hash
 }
 
 let uptime = () => {

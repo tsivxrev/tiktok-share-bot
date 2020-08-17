@@ -1,6 +1,6 @@
 {
   "name": "tiktok-share",
-  "version": "2.0",
+  "version": "11.0.1",
   "description": "App for download and sharing tiktok videoss",
   "main": "index.js",
   "scripts": {

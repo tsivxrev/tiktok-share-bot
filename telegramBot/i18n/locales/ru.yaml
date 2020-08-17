@@ -3,13 +3,17 @@ commands:
 
 cringeScene:
   msg_start: "Выберите действие:"
+  button_get_file: "Получить видео в виде файла"
   button_get_video_no_watermark: "Видео без вотермарки"
   button_get_video_watermark: "Видео с вотермаркой"
-  button_get_urls: "Получить прямые ссылки"
+  button_cancel: "Отмена"
 
   errors:
     error_get_urls: "_Произошла ошибка во время получения прямых ссылок :(_"
     error_get_video: "_Произошла ошибка во время получения видео :(_"
+    error_get_video_file: "_Произошла ошибка при получении файла :(_"
 
   msg:
-    raw_urls: "*Прямые ссылки на видео:*\n\n[Ссылка](${video_url_watermark}) на видео *с вотермаркой*\n[Ссылка](${video_url_no_watermark}) на видео *без вотермарки*" 
+    raw_urls: "*Прямые ссылки на видео:*\n\n[Ссылка](${video_url_watermark}) на видео *с вотермаркой*\n[Ссылка](${video_url_no_watermark}) на видео *без вотермарки*"
+    special_msg: "_Недоступно_"
+    cancel_msg: "Хорошо..."

@@ -19,46 +19,63 @@ class TikTok {
     async getVideoMetaInfo() {
         logger.info("Getting video meta from: " + this.videoUrl, {label: 'TikTok Module'})
         this.video = await TikTokScraper.getVideoMeta(this.videoUrl, this.options);
+        
         return this.video;
     }
     getVideoId() {
-        return this.video.id
+        return this.video.collector[0].id
     }
 
     getRawUrls() {
-        return { "videoUrl": this.video.videoUrl,"videoUrlNoWaterMark": this.video.videoUrlNoWaterMark || this.video.videoUrl};
+        return { 
+            "videoUrl": this.video.collector[0].videoUrl,
+            "videoUrlNoWaterMark": this.video.collector[0].videoUrlNoWaterMark
+        };
     }
 
     getFullUrl() {
-        return `https://tiktok.com/@${this.video.authorMeta.name}/video/${this.video.id}/`
+        return `https://tiktok.com/@${this.video.collector[0].authorMeta.name}/video/${this.video.collector[0].id}/`
     }
 
     getAuthorUrl() {
-        return `https://tiktok.com/@${this.video.authorMeta.name}/`
+        return `https://tiktok.com/@${this.video.collector[0].authorMeta.name}/`
     }
 
     getMusicString() {
-        return `${this.video.musicMeta.musicAuthor} - ${this.video.musicMeta.musicName} `
+        return `${this.video.collector[0].musicMeta.musicAuthor} - ${this.video.collector[0].musicMeta.musicName} `
     }
 
     getNameVideo() {
-        return this.video.text;
+        return this.video.collector[0].text;
     }
+    
     getFullDescription() {
-        return `Text: ${this.video.text}\n\nMusic: ${this.getMusicString()}\n\nVideo: ${this.getFullUrl()}\nAuthor: ${this.getAuthorUrl()}`
+        return `Text: ${this.video.collector[0].text}\n\nMusic: ${this.getMusicString()}\n\nVideo: ${this.getFullUrl()}\nAuthor: ${this.getAuthorUrl()}`
     }
+
+    getFullDescriptionMarkDown() {
+        return "Text: " + this.video.collector[0].text + "\n\nMusic: " + this.getMusicString() + "\n\nVideo: " + this.getFullUrl() + "\nAuthor: " + this.getAuthorUrl()
+    }
+
     async getBuffer() {
         try {
-            const response = await axios.get(this.watermark ? this.video.videoUrl : this.video.videoUrlNoWaterMark, {responseType: 'arraybuffer'});
+            
+            const response = await axios.get(this.video.collector[0].videoUrl, 
+                {
+                    responseType: 'arraybuffer',
+                    headers: this.video.headers
+                }
+            );
+            //console.info(JSON.stringify(this.video.headers, '', '\t'))
             return Buffer.from(response.data);
         }
-        catch {
-            throw new TIKTOK_MODULE_ERROR('Video download error');
+        catch (error) {
+            throw new TIKTOK_MODULE_ERROR('Video download error: ' + error);
         }
     }
     async getImageBuffer() {
         try {
-            const response = await axios.get(this.video.imageUrl, {responseType: 'arraybuffer'});
+            const response = await axios.get(this.video.collector[0].imageUrl, {responseType: 'arraybuffer'});
             return Buffer.from(response.data);
         }
         catch {
@@ -84,21 +101,6 @@ class Uploader {
     }
 
     async getVkAttachment(watermark=true) {
-        // logInformation.info("Get attachment from DataBase...")
-        // let videoId = this.video.getVideoId();
-
-        // let _video = await findClip(videoId).catch(err => errorLog.error(err))
-
-        // if (watermark) {
-        //     if (_video.VKattachmentWatermark) {
-        //         return _video.VKattachmentWatermark
-        //     }
-        // }
-        // else {
-        //     if (_video.VKattachmentNoWatermark) {
-        //         return _video.VKattachmentNoWatermark
-        //     }
-        // }
 
         logger.info("Uploading attachment...", {label: 'TikTok Module'})
 
@@ -119,15 +121,6 @@ class Uploader {
     }
 
     addingAttachment(watermark, video) {
-        // if (watermark) {
-        //     addVKAttachWithWatermark(this.video.getVideoId(), video.toString()).then(() => {
-        //         logDbInformation.info("Update attachment with watermark. Attachment: " + video.toString() + " Clip ID: " + this.video.getVideoId())
-        //     }).catch((err) => { errorLog.error(err)})
-        // } else {
-        //     addVKAttachWithoutWatermark(this.video.getVideoId(), video.toString()).then(() => {
-        //         logDbInformation.info("Update attachment without watermark. Attachment: " + video.toString() + " Clip ID: " + this.video.getVideoId())
-        //     }).catch((err) => {errorLog.error(err)})
-        // }
         return video
     }
 }

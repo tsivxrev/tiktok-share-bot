@@ -33,9 +33,16 @@ stepHandler.action('logsFromCustomPeriod', async (ctx) => {
     return ctx.scene.leave()
 })
 
+stepHandler.action('logsLeaveScene', async (ctx) => {
+    logger.info(`leave logs scene`, {label: 'Telegram'})
+    await ctx.deleteMessage(),
+    await ctx.replyWithMarkdown("Хорошо")
+    return ctx.scene.leave()
+})
+
 const logsSceneWizard = new WizardScene('logs-wizard',
     (ctx) => {
-
+        console.info(ctx.from.id)
         if(!process.env.ADMIN_IDS_TG.includes(ctx.from.id)) {
             ctx.replyWithMarkdown('_Access denied_')
             return ctx.scene.leave()
@@ -44,7 +51,8 @@ const logsSceneWizard = new WizardScene('logs-wizard',
         ctx.reply('Период', Markup.inlineKeyboard([
             [Markup.callbackButton('Получить логи за последний день', 'logsFromOneDay')],
             [Markup.callbackButton('Получить логи за последнюю неделю', 'logsFromOneWeek')],
-            [Markup.callbackButton('Выбрать количество дней', 'logsFromCustomPeriod')]
+            [Markup.callbackButton('Выбрать количество дней', 'logsFromCustomPeriod')],
+            [Markup.callbackButton('Отмена', 'logsLeaveScene')]
         ]).extra())
         
     return ctx.wizard.next()

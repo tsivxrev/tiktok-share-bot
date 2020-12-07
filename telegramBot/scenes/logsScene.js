@@ -15,14 +15,26 @@ stepHandler.action('logsFromOneDay', async (ctx) => {
 stepHandler.action('logsFromOneWeek', async (ctx) => {
     logger.info(`Request to receive logs at: ${ctx.from.id}`, {label: 'Telegram'})
     await ctx.deleteMessage(),
-	await ctx.replyWithDocument({
-        source: 'logs/application-info.log',
-        filename: 'logs.txt'
-    }, 
-    {
-        caption: "*Лог-лист* за последнюю неделю",
-        parse_mode: 'Markdown'
-    })
+    await ctx.replyWithMediaGroup(
+        [
+            {
+                media: {
+                    source: 'logs/application-info.log',
+                    filename: 'logs-'+ +new Date() +'.txt'
+                },
+                type: 'document'
+            },
+            {
+                media: {
+                    source: 'logs/error.log',
+                    filename: 'logs-error-'+ +new Date() +'.txt'
+                },
+                type: 'document',
+                caption: "*Лог-лист* за последнюю неделю",
+                parse_mode: 'Markdown'
+            }
+        ],
+    )
     return ctx.scene.leave()
 })
 

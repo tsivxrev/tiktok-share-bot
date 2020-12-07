@@ -20,7 +20,8 @@ const transport = [
     }),
     new transports.Console({
         level: 'info',
-        format: format.combine(/* format.colorize() */myFormat),
+        format: format.combine( format.colorize(), myFormat),
+        handleExceptions: true,
     })
 ]
 

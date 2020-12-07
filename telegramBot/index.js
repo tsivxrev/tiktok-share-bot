@@ -18,6 +18,13 @@ bot.use(session())
 bot.use(i18n.middleware())
 bot.use(stage.middleware())
 
+bot.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  logger.info('Response time: ' + ms + 'ms', {label: 'Telegram'})
+})
+
 bot.start(async(ctx) => {
     logger.info("Executed command 'start' at " + ctx.from.id, {label: 'Telegram'})
     await ctx.replyWithMarkdown(ctx.i18n.t('commands.start'))

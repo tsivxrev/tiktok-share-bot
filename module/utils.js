@@ -3,7 +3,7 @@ const { logger } = require("../module/logger")
 
 let getGitCommitHash = (long=true) => {
     let gitCommand = `${long ? `git rev-parse HEAD` : `git rev-parse --short HEAD`}`;
-    let commit_hash = "";
+    let commit_hash;
     try {
         commit_hash = execSync(gitCommand).toString().trim();
     } catch (e) {
@@ -27,8 +27,7 @@ String.prototype.toHHMMSS = function () {
     if (hours   < 10) {hours   = "0" + hours;}
     if (minutes < 10) {minutes = "0" + minutes;}
     if (seconds < 10) {seconds = "0" + seconds;}
-    let time    = /*days + ' d ' +  */hours + ':' + minutes +':' + seconds;
-    return time;
+    return hours + ':' + minutes + ':' + seconds;
 }
 
 

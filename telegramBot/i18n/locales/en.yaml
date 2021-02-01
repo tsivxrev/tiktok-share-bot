@@ -2,16 +2,17 @@ commands:
   start: "*TikTok Share* - Telegram bot to download or share TikTok videos.\nSend me a *TikTok video link* to continue."
 
 cringeScene:
-  msg_start: "Сhoose an action:"
-  button_get_file: "Get video file"
+  msg_start: "Choose an action:"
+  button_get_file: "Get video file (with watermark)"
+  button_get_file_no_watermark: "Get video file (without watermark)"
   button_get_video_no_watermark: "Get video without watermark"
   button_get_video_watermark: "Get video with watermark"
   button_cancel: "Cancel"
 
   errors:
-    error_get_urls: "_Ooops, encountered an error for getting video urls_"
-    error_get_video: " _Ooops, encountered an error for getting video_"
-    error_get_video_file: "_Ooops, encountered an error for getting video file_"
+    error_get_urls: "_Oops, encountered an error for getting video urls_"
+    error_get_video: " _Oops, encountered an error for getting video_"
+    error_get_video_file: "_Oops, encountered an error for getting video file_"
 
   msg:
     raw_urls: "*Raw URLs:*\n\n[URL](${video_url_watermark}) for video *with watermark*\n[URL](${video_url_no_watermark}) for video *without watermark*"

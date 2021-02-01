@@ -14,20 +14,44 @@ stepHandler.action('videoWatermark', async (ctx) => {
         let cringeVideo = new TikTok(ctx.wizard.state.videoUrl, {})
         await cringeVideo.getVideoMetaInfo()
         
-        Promise.all([
+        await Promise.all([
             await ctx.deleteMessage(),
             await ctx.replyWithVideo({
-                source: await cringeVideo.getBuffer() 
+                source: await cringeVideo.getBuffer(true)
             }, {
                 caption: cringeVideo.getFullDescriptionMarkDown()
             }),
 
             await ctx.answerCbQuery("🎉 Done"),
-            logger.info('Succesfull upload and sended video for ' + ctx.from.id, {label: 'Telegram'})
+            logger.info('Successfully upload and sent video for ' + ctx.from.id, {label: 'Telegram'})
         ])
     } catch (error) {
         logger.error(error, {label: 'Telegram'})
-        ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video'))
+        await ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video'))
+    }
+    return ctx.scene.leave()
+})
+
+stepHandler.action('videoNoWatermark', async (ctx) => {
+    logger.info(`Cringe scene: get video without watermark. User ID: ${ctx.from.id}`, {label: 'Telegram'})
+    try {
+        let cringeVideo = new TikTok(ctx.wizard.state.videoUrl, {})
+        await cringeVideo.getVideoMetaInfo()
+
+        await Promise.all([
+            await ctx.deleteMessage(),
+            await ctx.replyWithVideo({
+                source: await cringeVideo.getBuffer()
+            }, {
+                caption: cringeVideo.getFullDescriptionMarkDown()
+            }),
+
+            await ctx.answerCbQuery("🎉 Done"),
+            logger.info('Successfully upload and sent video for ' + ctx.from.id, {label: 'Telegram'})
+        ])
+    } catch (error) {
+        logger.error(error, {label: 'Telegram'})
+        await ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video'))
     }
     return ctx.scene.leave()
 })
@@ -37,27 +61,53 @@ stepHandler.action('videoGetFile', async (ctx) => {
     try {
         let cringeVideo = new TikTok(ctx.wizard.state.videoUrl, {})
         await cringeVideo.getVideoMetaInfo()
-        
-        // console.log(JSON.stringify(cringeVideo.getRawUrls(), "", '\t'))
 
-        Promise.all([
+        await Promise.all([
             await ctx.deleteMessage(),
             await ctx.replyWithDocument({
-                source: await cringeVideo.getBuffer(),
-                filename: "tiktok_share_" + Math.random().toString(16).substr(2) + '.mp4',
-            },
-            {
-                disable_content_type_detection: true,
-                caption: "With *love* from [@tt_get_bot](@tt_get_bot) ❤️",
-                parse_mode: 'Markdown'
-            }),
+                    source: await cringeVideo.getBuffer(true),
+                    filename: "tiktok_share_" + Math.random().toString(16).substr(2) + '.mp4',
+                },
+                {
+                    disable_content_type_detection: true,
+                    caption: "With *love* from [@tt_get_bot](@tt_get_bot) ❤️",
+                    parse_mode: 'Markdown'
+                }),
 
             await ctx.answerCbQuery("🎉 Done"),
-            logger.info('Succesfull upload and sended video file for ' + ctx.from.id, {label: 'Telegram'})
+            logger.info('Successfully upload and sent video file for ' + ctx.from.id, {label: 'Telegram'})
         ])
     } catch (error) {
         logger.error(error, {label: 'Telegram'})
-        ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video_file'))
+        await ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video_file'))
+    }
+    return ctx.scene.leave()
+})
+
+stepHandler.action('videoGetFileNoWatermark', async (ctx) => {
+    logger.info(`Cringe scene: get video file. User ID: ${ctx.from.id}`, {label: 'Telegram'})
+    try {
+        let cringeVideo = new TikTok(ctx.wizard.state.videoUrl, {})
+        await cringeVideo.getVideoMetaInfo()
+
+        await Promise.all([
+            await ctx.deleteMessage(),
+            await ctx.replyWithDocument({
+                    source: cringeVideo.getBuffer(),
+                    filename: "tiktok_share_" + Math.random().toString(16).substr(2) + '.mp4',
+                },
+                {
+                    disable_content_type_detection: true,
+                    caption: "With *love* from [@tt_get_bot](@tt_get_bot) ❤️",
+                    parse_mode: 'Markdown'
+                }),
+
+            await ctx.answerCbQuery("🎉 Done"),
+            logger.info('Successfully upload and sent video file for ' + ctx.from.id, {label: 'Telegram'})
+        ])
+    } catch (error) {
+        logger.error(error, {label: 'Telegram'})
+        await ctx.replyWithMarkdown(ctx.i18n.t('cringeScene.errors.error_get_video_file'))
     }
     return ctx.scene.leave()
 })
@@ -74,9 +124,11 @@ const superWizard = new WizardScene('super-wizard',
     ctx.wizard.state.videoUrl =  ctx.message.text;
     
     ctx.reply(ctx.i18n.t('cringeScene.msg_start'), Markup.inlineKeyboard([
-      [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_video_watermark'), 'videoWatermark')],
-      [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_file'), 'videoGetFile')],
-      [Markup.callbackButton(ctx.i18n.t('cringeScene.button_cancel'), 'cringeLeaveScene')]
+        [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_video_watermark'), 'videoWatermark')],
+        [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_video_no_watermark'), 'videoNoWatermark')],
+        [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_file'), 'videoGetFile')],
+        [Markup.callbackButton(ctx.i18n.t('cringeScene.button_get_file_no_watermark'), 'videoGetFileNoWatermark')],
+        [Markup.callbackButton(ctx.i18n.t('cringeScene.button_cancel'), 'cringeLeaveScene')]
     ]).extra())
     
     addUserTelegram(ctx.from.id, ctx.from.language_code).catch(err => { 

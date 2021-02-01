@@ -3,7 +3,8 @@ commands:
 
 cringeScene:
   msg_start: "Выберите действие:"
-  button_get_file: "Получить видео в виде файла"
+  button_get_file: "Получить видео в виде файла (с вотермаркой)"
+  button_get_file_no_watermark: "Получить видео в виде файла (без вотермарки)"
   button_get_video_no_watermark: "Видео без вотермарки"
   button_get_video_watermark: "Видео с вотермаркой"
   button_cancel: "Отмена"
